@@ -1,25 +1,41 @@
 package io.wkrzywiec.keycloak.backend.infra.security.config;
 
-import com.auth0.jwk.Jwk;
-import com.auth0.jwk.JwkException;
-import com.auth0.jwk.JwkProvider;
-import com.auth0.jwk.NetworkException;
-import com.auth0.jwk.SigningKeyNotFoundException;
+import com.auth0.jwk.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectReader;
 import com.google.common.collect.Lists;
 
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.util.List;
 import java.util.Map;
 
-public class KeycloakJwkProvider implements JwkProvider {
 
+
+public class KeycloakJwkProvider implements JwkProvider {
+    private static TrustManager[] trustAllCerts = new TrustManager[]{
+            new X509TrustManager() {
+                public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+                    return null;
+                }
+                public void checkClientTrusted(
+                        java.security.cert.X509Certificate[] certs, String authType) {
+                }
+                public void checkServerTrusted(
+                        java.security.cert.X509Certificate[] certs, String authType) {
+                }
+            }
+    };
     private final URI uri;
     private final ObjectReader reader;
 
@@ -69,7 +85,14 @@ public class KeycloakJwkProvider implements JwkProvider {
     private Map<String, Object> getJwks() throws SigningKeyNotFoundException {
         try {
 
-            HttpClient client = HttpClient.newHttpClient();
+            SSLContext sslContext = SSLContext.getInstance("TLS");
+            sslContext.init(null, trustAllCerts, new SecureRandom());
+
+            //HttpClient client = HttpClient.newHttpClient();
+            HttpClient client = HttpClient.newBuilder()
+                    .sslContext(sslContext)
+                    .build();
+
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(this.uri)
                     .headers("Accept", "application/json")
@@ -82,6 +105,10 @@ public class KeycloakJwkProvider implements JwkProvider {
 
         } catch (IOException | InterruptedException e) {
             throw new NetworkException("Cannot obtain jwks from url " + uri.toString(), e);
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        } catch (KeyManagementException e) {
+            throw new RuntimeException(e);
         }
     }
 }
