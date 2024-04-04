@@ -2,7 +2,7 @@ server:
   port: 8081
 
 keycloak:
-  url: http://localhost:8080
+  url: https://localhost:8443
   realm: test
 
 management:
