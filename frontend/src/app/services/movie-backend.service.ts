@@ -1,6 +1,6 @@
-import { HttpClient, HttpResponse } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import {HttpClient} from '@angular/common/http';
+import {Injectable} from '@angular/core';
+import {Observable} from 'rxjs';
 
 export interface Movie {
   title: string;
@@ -20,7 +20,7 @@ export interface Problem {
 })
 export class MovieBackendService {
 
-  private readonly backendUrl = '/movies'
+  private readonly backendUrl = '/movies';
 
   constructor(private http: HttpClient) { }
 

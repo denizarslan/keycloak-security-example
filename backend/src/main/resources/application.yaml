@@ -7,9 +7,6 @@ spring:
 server:
   port: 9000
 
-keycloak:
-  jwk: ${keycloak.url}/realms/${keycloak.realm}/protocol/openid-connect/certs
-
 logging:
   level:
     org:

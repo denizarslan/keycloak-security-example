@@ -1,10 +1,6 @@
 server:
   port: 8081
 
-keycloak:
-  url: https://localhost:8443
-  realm: test
-
 management:
   metrics:
     tags:
