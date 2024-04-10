@@ -6,7 +6,7 @@ import {ConfigInitService} from './config-init.service';
 export function initializeKeycloak(
   keycloak: KeycloakService,
   configService: ConfigInitService
-  ) {
+  ): () => Promise<unknown> {
     return () =>
       configService.getConfig()
         .pipe(

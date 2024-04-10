@@ -14,7 +14,7 @@ export class ContentComponent {
   movies: Movie[] = [];
   displayedColumns: string[] = ['title', 'director', 'year'];
 
-  @ViewChild(MatTable) table: MatTable<any>;
+  @ViewChild(MatTable) table: MatTable<any> | undefined;
 
   constructor(
     private keycloakService: KeycloakService,
@@ -23,46 +23,46 @@ export class ContentComponent {
 
   }
 
-  logout() {
+  logout(): void {
     this.keycloakService.logout();
   }
 
-  getAllMovies() {
+  getAllMovies(): void {
     this.backend.getAllMovies().subscribe(
 
         response => {
-          this.movies = response
-          this.table.renderRows();
+          this.movies = response;
+          this.table?.renderRows();
         },
 
         error => {
-          this.handleError(error.error)
-        })
+          this.handleError(error.error);
+        });
   }
 
-  onMovieIdChange(event: any){
+  onMovieIdChange(event: any): void {
     this.getMovieById(event.value);
   }
 
-  private getMovieById(id: number) {
+  private getMovieById(id: number): void {
     this.backend.getMovieById(id).subscribe(
 
         response => {
-          this.movies = [response]
-          this.table.renderRows();
+          this.movies = [response];
+          this.table?.renderRows();
         },
 
         error => {
-          this.handleError(error.error)
-        })
+          this.handleError(error.error);
+        });
   }
 
-  private handleError(error: any) {
-    this.displayError(error.code + ' ' + error.reason + ". " + error.message)
+  private handleError(error: any): void {
+    this.displayError(error.code + ' ' + error.reason + '. ' + error.message);
   }
 
-  private displayError(message: string) {
-    this.snackBar.open(message, 'Close', { duration: 5000})
+  private displayError(message: string): void {
+    this.snackBar.open(message, 'Close', { duration: 5000});
   }
 
 }
