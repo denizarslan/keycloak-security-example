@@ -1,8 +1,8 @@
-import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
-import { catchError, mergeMap } from 'rxjs/operators';
-import { environment } from '../../environments/environment';
+import {HttpClient} from '@angular/common/http';
+import {Injectable} from '@angular/core';
+import {Observable, of} from 'rxjs';
+import {catchError, mergeMap} from 'rxjs/operators';
+import {environment} from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -20,8 +20,8 @@ export class ConfigInitService {
         })
         .pipe(
           catchError((error) => {
-            console.log(error)
-            return of(null)
+            console.log(error);
+            return of(null);
           } ),
           mergeMap((response) => {
             if (response && response.body) {
@@ -34,6 +34,6 @@ export class ConfigInitService {
   }
 
   private getConfigFile(): string {
-    return environment.configFile
+    return environment.configFile;
   }
 }

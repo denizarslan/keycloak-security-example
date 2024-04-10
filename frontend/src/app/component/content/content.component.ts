@@ -11,7 +11,7 @@ import {Movie, MovieBackendService} from 'src/app/services/movie-backend.service
 })
 export class ContentComponent {
 
-  movies: Movie[] = []
+  movies: Movie[] = [];
   displayedColumns: string[] = ['title', 'director', 'year'];
 
   @ViewChild(MatTable) table: MatTable<any>;
