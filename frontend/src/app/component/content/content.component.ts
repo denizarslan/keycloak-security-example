@@ -1,8 +1,8 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { MatTable } from '@angular/material/table';
-import { KeycloakService } from 'keycloak-angular';
-import { Movie, MovieBackendService } from 'src/app/services/movie-backend.service';
+import {Component, ViewChild} from '@angular/core';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {MatTable} from '@angular/material/table';
+import {KeycloakService} from 'keycloak-angular';
+import {Movie, MovieBackendService} from 'src/app/services/movie-backend.service';
 
 @Component({
   selector: 'app-content',
@@ -11,16 +11,16 @@ import { Movie, MovieBackendService } from 'src/app/services/movie-backend.servi
 })
 export class ContentComponent {
 
-  movies: Movie[] = []
-  displayedColumns: string[] = ['title', 'director', 'year']; 
-  
+  movies: Movie[] = [];
+  displayedColumns: string[] = ['title', 'director', 'year'];
+
   @ViewChild(MatTable) table: MatTable<any>;
 
   constructor(
     private keycloakService: KeycloakService,
     private backend: MovieBackendService,
     private snackBar: MatSnackBar) {
-    
+
   }
 
   logout() {
@@ -29,10 +29,10 @@ export class ContentComponent {
 
   getAllMovies() {
     this.backend.getAllMovies().subscribe(
-        
+
         response => {
           this.movies = response
-          this.table.renderRows();          
+          this.table.renderRows();
         },
 
         error => {
@@ -46,12 +46,12 @@ export class ContentComponent {
 
   private getMovieById(id: number) {
     this.backend.getMovieById(id).subscribe(
-          
+
         response => {
           this.movies = [response]
           this.table.renderRows();
         },
-        
+
         error => {
           this.handleError(error.error)
         })
